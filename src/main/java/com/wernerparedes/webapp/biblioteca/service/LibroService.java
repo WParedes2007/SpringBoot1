@@ -3,10 +3,12 @@ package com.wernerparedes.webapp.biblioteca.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.wernerparedes.webapp.biblioteca.model.Libro;
 import com.wernerparedes.webapp.biblioteca.repository.LibroRepository;
 
+@Service
 public class LibroService implements ILibroService {
 
 
