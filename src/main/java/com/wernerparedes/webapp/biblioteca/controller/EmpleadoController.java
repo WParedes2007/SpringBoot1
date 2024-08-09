@@ -47,13 +47,11 @@ public class EmpleadoController {
         try {
                 if(empleadoService.guardarEmpleado(empleado)){
                     response.put("message","Empleado Creado Con Exito");
+                    return ResponseEntity.ok(response);
                 }else{
                     response.put("message","DPI Duplicado");
                     return ResponseEntity.badRequest().body(response);
                 }    
-            empleadoService.guardarEmpleado(empleado);
-            response.put("message", "El Empleado Se Agrego Con Exito");
-            return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("err", "Hubo Un Error Al Crear El Empleado");
             return ResponseEntity.badRequest().body(response);
@@ -74,7 +72,7 @@ public class EmpleadoController {
             if(empleadoService.guardarEmpleado(empleado)){
                 response.put("message", "El Empleado Se Edito Con Exito");
             }else{
-                response.put("message", "El Empleado Se Edito Con Exito");
+                response.put("message", "DPI Duplicado");
                 return ResponseEntity.badRequest().body(response);
             }    
             return ResponseEntity.ok(response);

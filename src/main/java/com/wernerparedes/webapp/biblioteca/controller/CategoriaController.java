@@ -48,7 +48,7 @@ public class CategoriaController{
                 response.put("message", "La Categoria Se Agrego Con Exito");
                 return ResponseEntity.ok(response);
             }else{
-                response.put("err", "Hubo Un Error Al Crear La Categoria");
+                response.put("err", "Categoria Duplicada");
                 return ResponseEntity.badRequest().body(response);
             }            
         } catch (Exception e) {
@@ -67,7 +67,7 @@ public class CategoriaController{
                 response.put("message", "La Categoria Se Edito Con Exito");
                 return ResponseEntity.ok(response);
             }else{
-                response.put("message", "Hubo Un Error Al Editar La Categoria");
+                response.put("message", "Categoria Duplicada");
                 return ResponseEntity.badRequest().body(response);
             }   
         } catch (Exception e) {
