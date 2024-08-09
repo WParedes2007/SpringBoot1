@@ -17,7 +17,7 @@ public class Categoria {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     //@NotNull(message = "El Nombre De La Categoria No Puede Ser Nulo")
     private String nombreCategoria;
     

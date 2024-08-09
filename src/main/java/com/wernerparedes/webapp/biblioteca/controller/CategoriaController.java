@@ -44,9 +44,13 @@ public class CategoriaController{
     public ResponseEntity<Map<String, String>> agregarCategoria(@RequestBody Categoria categoria){
         Map<String,String> response = new HashMap<>();
         try {
-            categoriaService.guardarCategoria(categoria);
-            response.put("message", "La Categoria Se Agrego Con Exito");
-            return ResponseEntity.ok(response);
+            if (categoriaService.guardarCategoria(categoria)) {
+                response.put("message", "La Categoria Se Agrego Con Exito");
+                return ResponseEntity.ok(response);
+            }else{
+                response.put("err", "Hubo Un Error Al Crear La Categoria");
+                return ResponseEntity.badRequest().body(response);
+            }            
         } catch (Exception e) {
             response.put("err", "Hubo Un Error Al Crear La Categoria");
             return ResponseEntity.badRequest().body(response);
@@ -59,9 +63,13 @@ public class CategoriaController{
         try {
             Categoria categoria = categoriaService.buscarCategoriaPorId(id);
             categoria.setNombreCategoria(categoriaNueva.getNombreCategoria());
-            categoriaService.guardarCategoria(categoria);
-            response.put("message", "La Categoria Se Edito Con Exito");
-            return ResponseEntity.ok(response);
+            if (categoriaService.guardarCategoria(categoria)) {
+                response.put("message", "La Categoria Se Edito Con Exito");
+                return ResponseEntity.ok(response);
+            }else{
+                response.put("message", "Hubo Un Error Al Editar La Categoria");
+                return ResponseEntity.badRequest().body(response);
+            }   
         } catch (Exception e) {
             response.put("message", "Hubo Un Error Al Editar La Categoria");
             return ResponseEntity.badRequest().body(response);

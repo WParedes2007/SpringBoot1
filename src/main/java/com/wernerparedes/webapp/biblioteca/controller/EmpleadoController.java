@@ -71,7 +71,12 @@ public class EmpleadoController {
             empleado.setDireccion(empleadoNuevo.getDireccion());
             empleado.setDpi(empleadoNuevo.getDpi());
             empleadoService.guardarEmpleado(empleado);
-            response.put("message", "El Empleado Se Edito Con Exito");
+            if(empleadoService.guardarEmpleado(empleado)){
+                response.put("message", "El Empleado Se Edito Con Exito");
+            }else{
+                response.put("message", "El Empleado Se Edito Con Exito");
+                return ResponseEntity.badRequest().body(response);
+            }    
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("message", "Hubo Un Error Al Editar El Empleado");
