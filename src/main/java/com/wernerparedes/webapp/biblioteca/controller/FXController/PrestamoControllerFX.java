@@ -1,7 +1,9 @@
 package com.wernerparedes.webapp.biblioteca.controller.FXController;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.text.SimpleDateFormat;
 
@@ -11,9 +13,11 @@ import org.springframework.stereotype.Component;
 
 import com.wernerparedes.webapp.biblioteca.model.Cliente;
 import com.wernerparedes.webapp.biblioteca.model.Empleado;
+import com.wernerparedes.webapp.biblioteca.model.Libro;
 import com.wernerparedes.webapp.biblioteca.model.Prestamo;
 import com.wernerparedes.webapp.biblioteca.service.ClienteService;
 import com.wernerparedes.webapp.biblioteca.service.EmpleadoService;
+import com.wernerparedes.webapp.biblioteca.service.LibroService;
 import com.wernerparedes.webapp.biblioteca.service.PrestamoService;
 import com.wernerparedes.webapp.biblioteca.system.Main;
 import com.wernerparedes.webapp.biblioteca.util.MethodType;
@@ -38,16 +42,19 @@ public class PrestamoControllerFX implements Initializable {
     TextField tfId, tfPrestamo, tfDevolucion, tfVigencia, tfBuscar;
 
     @FXML
-    Button btnGuardar, btnLimpiar, btnRegresar, btnEliminar, btnBuscar;
+    Button btnGuardar, btnLimpiar, btnRegresar, btnEliminar, btnBuscar, btnPrestar;
 
     @FXML
-    ComboBox cmbLibro, cmbEmpleado, cmbCliente;
+    ComboBox cmbLibro, cmbLibroII, cmbLibroIII, cmbEmpleado, cmbCliente;
 
     @FXML
     TableView tblPrestamos;
 
     @FXML
     TableColumn colId, colPrestamo, colDevolucion, colVigencia, colEmpleado, colCliente, colLibro, colPres;
+
+    private List<Libro> librosSeleccionados = new ArrayList<>();
+    private int estado = 0;
 
     @Setter
     private Main stage;
@@ -61,8 +68,14 @@ public class PrestamoControllerFX implements Initializable {
     @Autowired
     EmpleadoService empleadoService;
 
+    @Autowired
+    LibroService libroService;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        cmbLibro.setItems(FXCollections.observableList(libroService.listarLibros()));
+        cmbLibroII.setItems(FXCollections.observableList(libroService.listarLibros()));
+        cmbLibroIII.setItems(FXCollections.observableList(libroService.listarLibros()));
         cmbEmpleado.setItems(FXCollections.observableList(empleadoService.listarEmpleados()));
         cmbCliente.setItems(FXCollections.observableList(clienteService.listarClientes()));
         cargarDatos();
@@ -96,6 +109,14 @@ public class PrestamoControllerFX implements Initializable {
                 colCliente.setCellValueFactory(new PropertyValueFactory<Prestamo, Cliente>("cliente"));
             }
 
+        }else if (event.getSource() == btnPrestar) {
+            if (estado == 0) {
+                cmbLibroII.setDisable(false);
+                estado = 1;
+            } else if (estado == 1) {
+                cmbLibroIII.setDisable(false);
+                estado = 2;
+            }
         }
     }
 
@@ -122,6 +143,19 @@ public class PrestamoControllerFX implements Initializable {
             tfVigencia.setText(prestamo.getVigencia().toString());
             cmbEmpleado.getSelectionModel().select(obtenerIndexEmpleado());
             cmbCliente.getSelectionModel().select(obtenerIndexCliente());
+            int libros = prestamo.getLibros().size();
+            if (libros == 1) {
+                cmbLibro.getSelectionModel().select(obtenerIndexLibro());
+                cmbLibroII.setDisable(true);
+                cmbLibroIII.setDisable(true);
+            } else if (libros == 2) {
+                cmbLibroII.setDisable(false);
+                cmbLibroII.getSelectionModel().select(obtenerIndexLibro2());
+                cmbLibroIII.setDisable(true);
+            } else {
+                cmbLibroIII.setDisable(false);
+                cmbLibroIII.getSelectionModel().select(obtenerIndexLibro3());
+            }
         }
     }
 
@@ -132,6 +166,12 @@ public class PrestamoControllerFX implements Initializable {
         tfVigencia.clear();
         cmbCliente.getSelectionModel().clearSelection();
         cmbEmpleado.getSelectionModel().clearSelection();
+        cmbLibro.getSelectionModel().clearSelection();
+        cmbLibro.getSelectionModel().clearSelection();
+        cmbLibroII.getSelectionModel().clearSelection();
+        cmbLibroIII.getSelectionModel().clearSelection();
+        cmbLibroII.setDisable(true);
+        cmbLibroIII.setDisable(true);
     }
 
     public void agregarPrestamo() {
@@ -142,9 +182,12 @@ public class PrestamoControllerFX implements Initializable {
             java.util.Date fechaDevolucion = formatter.parse(tfDevolucion.getText());
             prestamo.setFechaDePrestamo(new java.sql.Date(fechaPrestamo.getTime()));
             prestamo.setFechaDeDevolucion(new java.sql.Date(fechaDevolucion.getTime()));
-            prestamo.setVigencia(true);
+            prestamo.setVigencia(Boolean.valueOf(tfVigencia.getText()));
             prestamo.setCliente((Cliente)cmbCliente.getSelectionModel().getSelectedItem());
             prestamo.setEmpleado((Empleado)cmbEmpleado.getSelectionModel().getSelectedItem());
+            prestamo.setLibros(librosSeleccionados);
+            cmbLibroII.setDisable(true);
+            cmbLibroIII.setDisable(true);
             prestamoService.guardarPrestamo(prestamo, MethodType.POST);
         cargarDatos();
         } catch (Exception e) {
@@ -156,13 +199,16 @@ public class PrestamoControllerFX implements Initializable {
     public void editarPrestamo() {
         try {
             Prestamo prestamo = prestamoService.buscarPrestamoPorId(Long.parseLong(tfId.getText()));
+            createSelectBook();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date fechaPrestamo = formatter.parse(tfPrestamo.getText());
             java.util.Date fechaDevolucion = formatter.parse(tfDevolucion.getText());
             prestamo.setFechaDePrestamo(new java.sql.Date(fechaPrestamo.getTime()));
             prestamo.setFechaDeDevolucion(new java.sql.Date(fechaDevolucion.getTime()));
+            prestamo.setVigencia(Boolean.valueOf(tfVigencia.getText()));
             prestamo.setCliente((Cliente)cmbCliente.getSelectionModel().getSelectedItem());
             prestamo.setEmpleado((Empleado)cmbEmpleado.getSelectionModel().getSelectedItem());
+            prestamo.setLibros(librosSeleccionados);
             prestamoService.guardarPrestamo(prestamo, MethodType.PUT);
             cargarDatos();
         } catch (Exception e) {
@@ -179,6 +225,22 @@ public class PrestamoControllerFX implements Initializable {
 
     public Prestamo buscarPrestamo() {
         return prestamoService.buscarPrestamoPorId(Long.parseLong(tfBuscar.getText()));
+    }
+
+    public void createSelectBook() {
+        librosSeleccionados.clear();
+        if (cmbLibro.getValue() != null) {
+            librosSeleccionados.add((Libro) cmbLibro.getValue());
+            System.out.println(librosSeleccionados);
+        }
+        if (cmbLibroII.getValue() != null) {
+            librosSeleccionados.add((Libro) cmbLibroII.getValue());
+            System.out.println(librosSeleccionados);
+        }
+        if (cmbLibroIII.getValue() != null) {
+            librosSeleccionados.add((Libro) cmbLibroIII.getValue());
+            System.out.println(librosSeleccionados);
+        }
     }
 
     public int obtenerIndexEmpleado() {
@@ -210,6 +272,58 @@ public class PrestamoControllerFX implements Initializable {
         }
         return index;
     }
+
+    public int obtenerIndexLibro() {
+        Prestamo prestamo = (Prestamo) tblPrestamos.getSelectionModel().getSelectedItem();
+        if (prestamo == null) {
+            return -1;
+        }
+
+        Libro libroSeleccionado = prestamo.getLibros().get(0);
+        for (int i = 0; i < cmbLibro.getItems().size(); i++) {
+            String libroCmb = cmbLibro.getItems().get(i).toString();
+            String libroTbl = libroSeleccionado.toString();
+            if (libroCmb.equals(libroTbl)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int obtenerIndexLibro2() {
+        Prestamo prestamo = (Prestamo) tblPrestamos.getSelectionModel().getSelectedItem();
+        if (prestamo == null || prestamo.getLibros().size() < 2) {
+            return -1;
+        }
+
+        Libro libroSeleccionado = prestamo.getLibros().get(1);
+        for (int i = 0; i < cmbLibroII.getItems().size(); i++) {
+            String libroCmb = cmbLibroII.getItems().get(i).toString();
+            String libroTbl = libroSeleccionado.toString();
+            if (libroCmb.equals(libroTbl)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int obtenerIndexLibro3() {
+        Prestamo prestamo = (Prestamo) tblPrestamos.getSelectionModel().getSelectedItem();
+        if (prestamo == null || prestamo.getLibros().size() < 3) {
+            return -1;
+        }
+
+        Libro libroSeleccionado = prestamo.getLibros().get(2);
+        for (int i = 0; i < cmbLibroIII.getItems().size(); i++) {
+            String libroCmb = cmbLibroIII.getItems().get(i).toString();
+            String libroTbl = libroSeleccionado.toString();
+            if (libroCmb.equals(libroTbl)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 
 }
 

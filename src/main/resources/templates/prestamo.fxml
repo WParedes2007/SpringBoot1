@@ -59,5 +59,13 @@
             <TableColumn fx:id="colEmpleado" prefWidth="75.0" text="Empleado" />
          </columns>
       </TableView>
+      <ComboBox fx:id="cmbLibro" layoutX="295.0" layoutY="71.0" prefWidth="150.0" style="-fx-border-color: #222823; -fx-border-width: 5;" />
+      <ComboBox fx:id="cmbLibroII" layoutX="295.0" layoutY="121.0" prefWidth="150.0" style="-fx-border-color: #222823; -fx-border-width: 5;" />
+      <ComboBox fx:id="cmbLibroIII" layoutX="295.0" layoutY="172.0" prefWidth="150.0" style="-fx-border-color: #222823; -fx-border-width: 5;" />
+      <Button fx:id="btnPrestar" layoutX="584.0" layoutY="66.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="58.0" prefWidth="121.0" style="-fx-border-color: #222823; -fx-border-width: 5; -fx-background-color: #A7A4A9;" text="Prestar">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
