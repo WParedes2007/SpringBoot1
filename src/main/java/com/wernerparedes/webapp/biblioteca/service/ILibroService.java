@@ -12,4 +12,6 @@ public interface ILibroService {
     public Libro buscarLibroPorId(Long id);
 
     public void eliminarLibro(Libro libro);
+
+    public void actualizarDisponibilidad(Libro libro, Boolean disponibilidad);
 }

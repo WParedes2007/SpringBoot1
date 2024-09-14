@@ -35,5 +35,10 @@ public class LibroService implements ILibroService {
         return libroRepository.findAll();
     }
     
+    @Override
+    public void actualizarDisponibilidad(Libro libro, Boolean disponibilidad) {
+            libro.setDisponibilidad(disponibilidad);
+            guardarLibro(libro);
+    }
 
 }

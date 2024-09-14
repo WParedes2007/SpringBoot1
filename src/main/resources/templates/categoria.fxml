@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#cargarFormEditar" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wernerparedes.webapp.biblioteca.controller.FXController.CategoriaControllerFX">
+   <children>
+      <ImageView fitHeight="600.0" fitWidth="1000.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/Categorias.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="tfId" editable="false" layoutX="69.0" layoutY="74.0" prefHeight="34.0" prefWidth="194.0" style="-fx-border-color: #222823; -fx-border-width: 5;" />
+      <TextField fx:id="tfNombre" layoutX="69.0" layoutY="180.0" prefHeight="34.0" prefWidth="194.0" style="-fx-border-color: #222823; -fx-border-width: 5;" />
+      <Button fx:id="btnGuardar" layoutX="316.0" layoutY="466.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="58.0" prefWidth="121.0" style="-fx-border-color: #222823; -fx-border-width: 5; -fx-background-color: #A7A4A9;" text="Guardar">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnEliminar" layoutX="445.0" layoutY="466.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="58.0" prefWidth="121.0" style="-fx-border-color: #222823; -fx-border-width: 5; -fx-background-color: #A7A4A9;" text="Eliminar">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnLimpiar" layoutX="576.0" layoutY="466.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="58.0" prefWidth="121.0" style="-fx-border-color: #222823; -fx-border-width: 5; -fx-background-color: #A7A4A9;" text="Vaciar">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Button>
+      <TableView fx:id="tblCategorias" layoutX="473.0" layoutY="136.0" onMouseClicked="#cargarFormEditar" prefHeight="200.0" prefWidth="381.0" style="-fx-border-color: #222823; -fx-border-width: 5;">
+        <columns>
+          <TableColumn fx:id="colId" prefWidth="196.0" text="ID" />
+          <TableColumn fx:id="colNombre" minWidth="0.0" prefWidth="184.0" text="Categoria" />
+        </columns>
+      </TableView>
+      <TextField fx:id="tfBuscar" layoutX="598.0" layoutY="74.0" prefHeight="34.0" prefWidth="194.0" style="-fx-border-color: #222823; -fx-border-width: 5;" />
+      <Button fx:id="btnRegresar" layoutX="704.0" layoutY="466.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="58.0" prefWidth="121.0" style="-fx-border-color: #222823; -fx-border-width: 5; -fx-background-color: #A7A4A9;" text="Regresar">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnBuscar" layoutX="473.0" layoutY="67.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="27.0" prefWidth="110.0" style="-fx-border-color: #222823; -fx-border-width: 5; -fx-background-color: #A7A4A9;" text="Buscar">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

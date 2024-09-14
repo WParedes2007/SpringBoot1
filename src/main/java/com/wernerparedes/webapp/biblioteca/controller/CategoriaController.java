@@ -92,18 +92,5 @@ public class CategoriaController{
 
     }
 
-    /*@PostMapping("/")
-    public ResponseEntity<Map<String, Boolean>> agregarCategoria(@RequestBody Categoria categoria){
-        Map<String,Boolean> response = new HashMap<>();
-        try {
-            categoriaService.guardarCategoria(categoria);
-            response.put("Se Agrego Con Exito", Boolean.TRUE);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            response.put("Se Agrego Con Exito", Boolean.FALSE);
-            return ResponseEntity.badRequest().body(response);
-        }
-
-        
-    }*/
+    
 }

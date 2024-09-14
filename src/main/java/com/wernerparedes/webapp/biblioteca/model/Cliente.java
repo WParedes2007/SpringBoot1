@@ -3,7 +3,6 @@ package com.wernerparedes.webapp.biblioteca.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
 
@@ -13,8 +12,7 @@ import lombok.ToString;
 @Table(name = "Clientes")
 public class Cliente {
     @Id
-    private long dpi;
-    @NotNull(message = "El Nombre No Puede Ser Nulo")
+    private Long dpi;
     private String nombre;
     private String apellido;
     private String telefono;

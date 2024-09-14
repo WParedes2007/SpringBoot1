@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wernerparedes.webapp.biblioteca.model.Libro;
 import com.wernerparedes.webapp.biblioteca.service.LibroService;
+import com.wernerparedes.webapp.biblioteca.util.MethodType;
 
 @Controller
 @RestController
